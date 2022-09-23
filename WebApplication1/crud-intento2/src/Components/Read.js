@@ -25,6 +25,16 @@ function Read() {
       })
     }
 
+
+    function pickRandom() {
+        var randPick = data[Math.floor(Math.random() * data.length)];
+        setToLocalStorage(randPick.id,
+            randPick.fullName,
+            randPick.phoneNumber,
+            randPick.address,
+            randPick.company);
+    }
+
     const setToLocalStorage = (id, fullName, phoneNumber, address, company) => {
       localStorage.setItem("id",id);
       localStorage.setItem("fullName",fullName);
@@ -44,6 +54,14 @@ function Read() {
     <Link to ="/">
     <button className = "btn btn-secondary">Create</button>
     </Link>
+    <Link to ="/update">
+            <button className='btn btn-success'
+            onClick={() => 
+            
+            pickRandom()
+              
+            }>Random Entry</button>    
+          </Link>
  </div>
  <div className='search'>
   
