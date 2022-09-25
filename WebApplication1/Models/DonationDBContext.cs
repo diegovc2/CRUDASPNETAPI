@@ -15,7 +15,7 @@ namespace WebApplication1
             }
 
 
-        public DbSet<DCandidate> DCandidates { get; set; }
+        public DbSet<ItemMaster> ItemMasters { get; set; }
     }
 
 }
