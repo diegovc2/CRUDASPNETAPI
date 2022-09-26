@@ -96,6 +96,37 @@ namespace WebApplication1.Controllers
             return CreatedAtAction("GetItemMaster", new { id = itemMaster.itemCode }, itemMaster);
         }
 
+        //SEARCH: api/ItemMasters1/search?query=juan
+
+
+        [HttpGet("search/{param}")]
+        public async Task<ActionResult<IEnumerable<ItemMaster>>> Search(string param)
+        {
+            try
+            {
+                IQueryable<ItemMaster> query = _context.ItemMasters;
+                if (!string.IsNullOrEmpty(param))
+                {
+                    query = query.Where(a => (a.itemCode.Contains(param) || a.description.Contains(param) ));
+                }
+
+                var result = await query.ToListAsync();
+
+                if (result.Any())
+                {
+                    return Ok(result);
+                }
+                return NotFound();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error in Retrieveing Data from Database");
+            }
+
+        }
+
+
         // DELETE: api/ItemMasters1/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<ItemMaster>> DeleteItemMaster(string id)
