@@ -8,29 +8,67 @@ function Read() {
 
     function getData(data) {
         var url;
-        data===undefined || data ===''? url='https://localhost:44328/api/DCandidates1/' : url = `https://localhost:44328/api/DCandidates1/search/${data}`
+        data===undefined || data ===''? url='https://localhost:44328/api/ItemMasters1/' : url = `https://localhost:44328/api/ItemMasters1/search/${data}`
         axios.get(url)
         .then((res) =>{
             console.log(res.data);
             setData(res.data);
         });
         
-        
+
     }
 
     function handleDelete(id) {
-      axios.delete(`https://localhost:44328/api/DCandidates1/${id}`
+      axios.delete(`https://localhost:44328/api/ItemMasters1/${id}`
       ).then(() => {
         getData();
       })
     }
 
-    const setToLocalStorage = (id, fullName, phoneNumber, address, company) => {
-      localStorage.setItem("id",id);
-      localStorage.setItem("fullName",fullName);
-      localStorage.setItem("phoneNumber", phoneNumber);
-      localStorage.setItem("address",address);
-      localStorage.setItem("company",company);
+    function pickRandom() {
+        var randPick = data[Math.floor(Math.random() * data.length)];
+        setToLocalStorage(randPick.itemCode,
+                          randPick.description,
+                          randPick.active,
+                          randPick.customerDescription,
+                          randPick.salesItem,
+                          randPick.stockItem,
+                          randPick.purchasedItem,
+                          randPick.barcode,
+                          randPick.manageItemBy,
+                          randPick.minimumInventory,
+                          randPick.maximumInventory,
+                          randPick.remarks,
+                          randPick.imagePath,
+                          );
+    }
+
+    const setToLocalStorage = (itemCode,
+      description,
+      active,
+      customerDescription,
+      salesItem,
+      stockItem,
+      purchasedItem,
+      barcode,
+      manageItemBy,
+      minimumInventory,
+      maximumInventory,
+      remarks,
+      imagePath) => {
+        localStorage.setItem("itemCode",itemCode);
+      localStorage.setItem("description",description);
+      localStorage.setItem("active",active);
+      localStorage.setItem("customerDescription",customerDescription);
+      localStorage.setItem("salesItem",salesItem);
+      localStorage.setItem("stockItem",stockItem);
+      localStorage.setItem("purchasedItem",purchasedItem);
+      localStorage.setItem("barcode",barcode);
+      localStorage.setItem("manageItemBy",manageItemBy);
+      localStorage.setItem("minimumInventory",minimumInventory);
+      localStorage.setItem("maximumInventory",maximumInventory);
+      localStorage.setItem("remarks",remarks);
+      localStorage.setItem("imagePath",imagePath);
     }
 
     useEffect(() => {
@@ -44,6 +82,14 @@ function Read() {
     <Link to ="/">
     <button className = "btn btn-secondary">Create</button>
     </Link>
+    <Link to ="/update">
+            <button className='btn btn-success'
+            onClick={() => 
+            
+            pickRandom()
+              
+            }>Random Entry</button>    
+          </Link>
  </div>
  <div className='search'>
   
@@ -58,11 +104,19 @@ function Read() {
     <table className="table">
   <thead>
     <tr>
-      <th scope="col">id</th>
-      <th scope="col">Name</th>
-      <th scope="col">Phone Number</th>
-      <th scope="col">Address</th>
-      <th scope="col">Company</th>
+    <th scope ="col">itemCode</th>
+      <th scope ="col">description</th>
+      <th scope ="col">active</th>
+      <th scope ="col">customerDescription</th>
+      <th scope ="col">salesItem</th>
+      <th scope ="col">stockItem</th>
+      <th scope ="col">purchasedItem</th>
+      <th scope ="col">barcode</th>
+      <th scope ="col">manageItemBy</th>
+      <th scope ="col">minimumInventory</th>
+      <th scope ="col">maximumInventory</th>
+      <th scope ="col">remarks</th>
+      <th scope="col">imagePath</th>
     </tr>
   </thead>
   <tbody>
@@ -71,26 +125,42 @@ function Read() {
         return(
           <>
             
-    <tr>
-      <th scope="row">{eachData.id}</th>
-      <td>{eachData.fullName}</td>
-      <td>{eachData.phoneNumber}</td>
-      <td>{eachData.address}</td>
-      <td>{eachData.company}</td>
+    <tr key={eachData.itemCode}>
+    <th scope='row' >{eachData.itemCode}</th>
+      <td>{eachData.description}</td>
+      <td>{eachData.active.toString()}</td>
+      <td>{eachData.customerDescription}</td>
+      <td>{eachData.salesItem.toString()}</td>
+      <td>{eachData.stockItem.toString()}</td>
+      <td>{eachData.purchasedItem.toString()}</td>
+      <td>{eachData.barcode}</td>
+      <td>{eachData.manageItemBy}</td>
+      <td>{eachData.minimumInventory}</td>
+      <td>{eachData.maximumInventory}</td>
+      <td>{eachData.remarks}</td>
+      <td>{eachData.imagePath}</td>
       <td>
           <Link to ="/update">
-            <button className='btn-success'
+            <button className='btn btn-success'
             onClick={() => 
             setToLocalStorage(
-              eachData.id,
-              eachData.fullName,
-              eachData.phoneNumber,
-              eachData.address,
-              eachData.company,
-            )}>Edit</button>    
+              eachData.itemCode,
+      eachData.description,
+      eachData.active,
+      eachData.customerDescription,
+      eachData.salesItem,
+      eachData.stockItem,
+      eachData.purchasedItem,
+      eachData.barcode,
+      eachData.manageItemBy,
+      eachData.minimumInventory,
+      eachData.maximumInventory,
+      eachData.remarks,
+      eachData.imagePath
+      )}>Edit</button>    
           </Link>
       </td>
-      <td><button className='btn-danger' onClick = {() => handleDelete(eachData.id)}>Delete</button></td>
+      <td><button className='btn btn-danger' onClick = {() => handleDelete(eachData.itemCode)}>Delete</button></td>
     </tr>     
           </>
         )

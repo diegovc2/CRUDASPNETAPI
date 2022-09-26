@@ -26,38 +26,36 @@ function Update() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setItemCode(localStorage.getItem("itemCode"));
-    setDescription(localStorage.getItem("description"));
-    setActive(localStorage.getItem("active"));
-    setCustomerDescription(localStorage.getItem("customerDescription"));
-    setSalesItem(localStorage.getItem("salesItem"));
-    setStockItem(localStorage.getItem("stockItem"));
-    setPurchasedItem(localStorage.getItem("purchasedItem"));
-    setBarcode(localStorage.getItem("barcode"));
-    setManageItemBy(localStorage.getItem("manageItemBy"));
-    setMinimumInventory(localStorage.getItem("minimumInventory"));
-    setMaximumInventory(localStorage.getItem("maximumInventory"));
-    setRemarks(localStorage.getItem("remarks"));
-    setImagePath(localStorage.getItem("imagePath"));
+    setItemCode(localStorage.getItem(itemCode));
+    setDescription(localStorage.getItem(description));
+    setActive(localStorage.getItem(active));
+    setCustomerDescription(localStorage.getItem(customerDescription));
+    setSalesItem(localStorage.getItem(salesItem));
+    setStockItem(localStorage.getItem(stockItem));
+    setPurchasedItem(localStorage.getItem(purchasedItem));
+    setBarcode(localStorage.getItem(barcode));
+    setManageItemBy(localStorage.getItem(manageItemBy));
+    setMinimumInventory(localStorage.getItem(minimumInventory));
+    setRemarks(localStorage.getItem(remarks));
+    setImagePath(localStorage.getItem(imagePath));
   }, []);
   
   const handleUpdate = (e) => {
     e.preventDefault();
     console.log("Id...", itemCode);
-    
     axios.put(`https://localhost:44328/api/ItemMasters1/${itemCode}`,
-      {
+    {
       itemCode:itemCode,
       description:description,
-      active:    active === "true"? true : false,
+      active:active,
       customerDescription:customerDescription,
-      salesItem:    salesItem === "true"? true : false,
-      stockItem: stockItem === "true"? true : false,
-      purchasedItem:purchasedItem === "true"? true : false,
+      salesItem:salesItem,
+      stockItem:stockItem,
+      purchasedItem:purchasedItem,
       barcode:barcode,
-      manageItemBy:parseInt(manageItemBy),
-      minimumInventory:parseInt(minimumInventory),
-      maximumInventory:parseInt(maximumInventory),
+      manageItemBy:manageItemBy,
+      minimumInventory:minimumInventory,
+      maximumInventory:maximumInventory,
       remarks:remarks,
       imagePath:imagePath,
     }).then(() => {
@@ -74,7 +72,7 @@ function Update() {
   <div className="mb-3">
     <label htmlFor="itemCode" className="form-label">Item Code</label>
     <input  className="form-control" 
-    value = {itemCode.toString()}
+    value= {itemCode}
     onChange={(e) => setItemCode(e.target.value)}
      id="itemCode" aria-describedby="itemCodeHelp" />
 </div>
@@ -87,10 +85,9 @@ function Update() {
     />
   </div>
 
-
-<div className="mb-3">
-  <input className="form-check-input" type="checkbox" id="active" 
-  onChange={(e) => setActive(e.target.value) }/>
+  
+  <div className="mb-3">
+  <input className="form-check-input" type="checkbox" id="active" checked ={active} onChange={(e) => setActive(e.target.value)}/>
   <label className="form-check-label" htmlFor="active">
     Active
   </label>
@@ -104,22 +101,21 @@ function Update() {
 
 
   <div className="mb-3">
-    
-  <input className="form-check-input" onChange={(e) => setSalesItem(e.target.value)}  type="checkbox" value="salesItem" id="salesItem" />
+  <input className="form-check-input" onChange={(e) => setSalesItem(e.target.value)} checked ={salesItem} type="checkbox" value="salesItem" id="salesItem" />
   <label className="form-check-label" htmlFor="salesItem">
     Sales Item
   </label>
   </div>
 
   <div className="mb-3">
-  <input className="form-check-input" onChange={(e) => setStockItem(e.target.value)}  type="checkbox" value="stockItem" id="stockItem" />
+  <input className="form-check-input" onChange={(e) => setStockItem(e.target.value)} checked ={stockItem} type="checkbox" value="stockItem" id="stockItem" />
   <label className="form-check-label" htmlFor="stockItem">
     Stock Item  
   </label>
   </div>
 
   <div className="mb-3">
-  <input className="form-check-input" type="checkbox" onChange={(e) => setPurchasedItem(e.target.value)}  value="purchasedItem" id="purchasedItem" />
+  <input className="form-check-input" type="checkbox" onChange={(e) => setPurchasedItem(e.target.value)} checked ={purchasedItem} value="purchasedItem" id="purchasedItem" />
   <label className="form-check-label" htmlFor="purchasedItem">
     Purchased Item
   </label>
@@ -135,7 +131,7 @@ function Update() {
     <select className="form-select" onChange={(e) => setManageItemBy(e.target.value)} aria-label="Manage Item By" >
     
     {Object.keys(enumItem).map((eachData) => {
-            if(parseInt(manageItemBy) === enumItem[eachData]){
+            if(manageItemBy === enumItem[eachData]){
               return<option selected value={enumItem[eachData]}>{eachData}</option>  
             } else {
               return <option value={enumItem[eachData]}>{eachData}</option>  
@@ -148,12 +144,12 @@ function Update() {
 
   <div className="mb-3">
     <label htmlFor="minimumInventory" className="form-label">Mnimum Inventory </label>
-    <input  className="form-control" id="minimumInventory" value= {minimumInventory} onChange={(e) => setMinimumInventory(e.target.value)} type="number" />
+    <input  className="form-control" id="minimumInventory" onChange={(e) => setMinimumInventory(e.target.value)} type="number" />
   </div>
 
   <div className="mb-3">
     <label htmlFor="maximumInventory" className="form-label">Maximum Inventory </label>
-    <input  className="form-control" id="maximumInventory" value = {maximumInventory} onChange={(e) => setMaximumInventory(e.target.value)} type="number" />
+    <input  className="form-control" id="maximumInventory" onChange={(e) => setMaximumInventory(e.target.value)} type="number" />
   </div>
 
   
@@ -164,7 +160,7 @@ function Update() {
 
   <div className="mb-3">
     <label htmlFor="imagePath" className="form-label">Image Path </label>
-    <input  className="form-control" id="imagePath" value={imagePath} onChange={(e) => setImagePath(e.target.value)} />
+    <input  className="form-control" id="imagePath" onChange={(e) => setImagePath(e.target.value)} />
   </div>
 
 
